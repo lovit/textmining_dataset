@@ -137,8 +137,8 @@ def load_sentiment_dataset(large=False, tokenize='komoran', directory=None):
         Tokenized texts
     x : scipy.sparse.csr_matrix
         Term frequency matrix with shape (n_docs, n_terms)
-    y : list of int
-        Sentiment label
+    y : numpy.ndarray
+        Sentiment label with shape (n_docs,)
         1 is positive, -1 is negative
     idx_to_vocab : list of str
         Term list
