@@ -66,4 +66,4 @@ def _fetch(shared_url, download_fname, directory):
     else:
         raise IOError('Failed to unzip {} {}'.format(dataset, download_fname))
 
-    os.remove(download_fname)
+    os.remove(download_path)
