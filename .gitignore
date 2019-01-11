@@ -1,0 +1,13 @@
+# Data & Model directory
+*/data
+*/models
+
+# Python
+*.pyc
+__pycache__
+
+# IPython notebook
+*.ipynb_checkpoint
+
+# Mac
+.DS_Store
