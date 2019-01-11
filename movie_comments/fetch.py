@@ -54,13 +54,13 @@ def fetch_model(shared_url):
 def _fetch(shared_url, download_fname, directory):
     check_url(shared_url, download_fname)
 
-    download_path = os.path.abspath(download_fname)
+    download_path = os.path.abspath('{}/movie_comments/{}'.format(installpath, download_fname))
     if download(shared_url, download_path):
         print('Success to download {} {}'.format(dataset, download_fname))
     else:
         raise IOError('Failed to download {} '.format(dataset, download_fname))
 
-    unzip_path = os.path.abspath(directory)
+    unzip_path = os.path.abspath('{}/movie_comments/{}'.format(installpath, directory))
     if unzip(download_path, unzip_path):
         print('Success to unzip {} {}'.format(dataset, download_fname))
     else:
