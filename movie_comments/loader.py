@@ -119,14 +119,13 @@ def load_id_to_movie(directory=None):
         id_to_movie =  pickle.load(f)
     return id_to_movie
 
-def load_sentiment_dataset(large=False, tokenize='komoran', directory=None):
+def load_sentiment_dataset(model_name='small', tokenize='komoran', directory=None):
     """
     Arguments
     ---------
-    large : Booolean
-        If True it returns data_large.
-        Else, it returns data_small.
-        Default is False
+    model_name : str
+        Tokenized model name. Choose ['small', '10k']
+        Default is small
     tokenzie : str
         Choose ['komoran', 'soynlp']
         Default is 'komoran'
@@ -148,9 +147,6 @@ def load_sentiment_dataset(large=False, tokenize='komoran', directory=None):
     if directory is None:
         directory = '{}/movie_comments/models/'.format(installpath)
 
-    # set data size
-    size = 'large' if large else 'small'
-
     # set tokenizer type
     if tokenize is 'komoran':
         tokenization = '_komoran'
@@ -159,10 +155,10 @@ def load_sentiment_dataset(large=False, tokenize='komoran', directory=None):
     else:
         raise ValueError('Set tokenize as komoran or soynlp')
 
-    texts_path = '{}/sentiment_{}{}_texts.txt'.format(directory, size, tokenization)
-    x_path = '{}/sentiment_{}{}_x.pkl'.format(directory, size, tokenization)
-    y_path = '{}/sentiment_{}{}_y.pkl'.format(directory, size, tokenization)
-    vocab_path = '{}/sentiment_{}{}_vocab.txt'.format(directory, size, tokenization)
+    texts_path = '{}/sentiment_{}{}_texts.txt'.format(directory, model_name, tokenization)
+    x_path = '{}/sentiment_{}{}_x.pkl'.format(directory, model_name, tokenization)
+    y_path = '{}/sentiment_{}{}_y.pkl'.format(directory, model_name, tokenization)
+    vocab_path = '{}/sentiment_{}{}_vocab.txt'.format(directory, model_name, tokenization)
 
     with open(texts_path, encoding='utf-8') as f:
         texts = [text.split() for text in f]

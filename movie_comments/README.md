@@ -48,5 +48,5 @@ id_to_movie = load_id_to_movie()
 Sentiment classification 용 데이터를 로딩할 수 있습니다.
 
 ```python
-x, y, idx_to_vocab = load_sentiment_dataset(large=False, tokenize='komoran')
+x, y, idx_to_vocab = load_sentiment_dataset(model_name='10k', tokenize='komoran')
 ```
