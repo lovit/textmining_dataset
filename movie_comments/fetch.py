@@ -23,6 +23,11 @@ def download(url, fname):
         It return True if downloading success else return False
     """
 
+    fname = os.path.abspath(fname)
+    dirname = os.path.dirname(fname)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+
     # If you do not set user-agent, downloading from url is stalled.
     headers = {'user-agent': 'Wget/1.16 (linux-gnu)'}
     try:
