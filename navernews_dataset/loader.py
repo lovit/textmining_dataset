@@ -1,3 +1,4 @@
+import pickle
 import os
 from glob import glob
 
@@ -63,3 +64,12 @@ def get_comments_index_paths(date=None):
     paths = sorted(glob('{}/{}/data/comments/*.index'.format(installpath, dataset)))
     paths = [os.path.abspath(p) for p in paths]
     return paths
+
+def get_bow(date='2016-10-20', tokenize='noun'):
+    path = '{}/{}/models/{}_bow_{}.pkl'.format(installpath, dataset, date, tokenize)
+    with open(path, 'rb') as f:
+        params = pickle.load(f)
+        x = params['x']
+        idx_to_vocab = params['idx_to_vocab']
+        vocab_to_idx = params['vocab_to_idx']
+    return x, idx_to_vocab, vocab_to_idx
