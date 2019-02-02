@@ -1,6 +1,6 @@
 # Data & Model directory
-*/data
-*/models
+*/*/data
+*/*/models
 
 # Python
 *.pyc
