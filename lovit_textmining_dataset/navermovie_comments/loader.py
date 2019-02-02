@@ -1,8 +1,8 @@
 import os
 import pickle
 
-installpath = os.path.sep.join(
-    os.path.dirname(os.path.realpath(__file__)).split(os.path.sep)[:-1])
+installpath = os.path.dirname(os.path.realpath(__file__))
+print('navermovie installpath = %s' % installpath)
 
 def load_lalaland_movie_comments_texts(tokenize=None, directory=None):
     """
@@ -60,7 +60,7 @@ def load_movie_comments(large=False, tokenize=None, num_doc=-1, directory=None):
 
     # set default directory
     if directory is None:
-        directory = '{}/movie_comments/data/'.format(installpath)
+        directory = '{}/data/'.format(installpath)
 
     # set data size
     size = 'large' if large else 'small'
@@ -113,7 +113,7 @@ def load_id_to_movie(directory=None):
     """
 
     if directory is None:
-        directory = '{}/movie_comments/data/'.format(installpath)
+        directory = '{}/data/'.format(installpath)
     path = '{}/id_to_movie.pkl'.format(directory)
     with open(path, 'rb') as f:
         id_to_movie =  pickle.load(f)
@@ -145,7 +145,7 @@ def load_sentiment_dataset(model_name='small', tokenize='komoran', directory=Non
 
     # set default directory
     if directory is None:
-        directory = '{}/movie_comments/models/'.format(installpath)
+        directory = '{}/models/'.format(installpath)
 
     # set tokenizer type
     if tokenize is 'komoran':
