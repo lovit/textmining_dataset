@@ -6,6 +6,36 @@ installpath = os.path.dirname(os.path.realpath(__file__))
 version_url = 'https://raw.githubusercontent.com/lovit/textmining_dataset/master/lovit_textmining_dataset/versions'
 wget_headers = {'user-agent': 'Wget/1.16 (linux-gnu)'}
 
+def fetch(dataset=None, content=None):
+    raise NotImplemented
+
+def fetch_from_a_url(dataset, content, url):
+    """
+    Arguments
+    ---------
+    url : str
+        URL of file to be downloaded
+    download_fname : str
+        Path of local download file
+    directory : str
+        Directory path for unzip
+    """
+
+    download_fname = url.split('?')[0].split('/')[-1]
+    download_path = os.path.abspath('{}/{}'.format(installpath, download_fname))
+    if download_a_file(url, download_path):
+        print('Success to download {} {}'.format(dataset, download_fname))
+    else:
+        raise IOError('Failed to download {} '.format(dataset, download_fname))
+
+    unzip_path = os.path.abspath('{}/{}/{}'.format(installpath, dataset, content))
+    if unzip(download_path, unzip_path):
+        print('Success to unzip {}.{}'.format(dataset, content))
+    else:
+        raise IOError('Failed to unzip {}.{}'.format(dataset, content))
+
+    os.remove(download_path)
+
 def version_check(return_fetch_list=False):
     # load local versions
     with open('{}/versions'.format(installpath), encoding='utf-8') as f:
