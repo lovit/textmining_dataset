@@ -50,25 +50,3 @@ Sentiment classification 용 데이터를 로딩할 수 있습니다.
 ```python
 x, y, idx_to_vocab = load_sentiment_dataset(model_name='10k', tokenize='komoran')
 ```
-
-## Fetch
-
-`data` 혹은 `models` 폴더의 데이터나 학습된 모델들이 업데이트 될 수 있습니다. 이들을 공유된 url 을 입력하여 업데이트 하는 함수를 제공합니다. `fetch_data` 와 `fetch_model` 은 각각 `data`, `models` 폴더를 업데이트 합니다. `fetch_all` 은 두 폴더를 동시에 학습합니다. 공유된 url 은 data 와 models 에 대하여 별도로 제공됩니다.
-
-```python
-from movie_comments import fetch_data
-from movie_comments import fetch_model
-from movie_comments import fetch_all
-
-data_url = ''
-model_url = ''
-
-fetch_data(data_url)
-fetch_model(model_url)
-```
-
-혹은
-
-```python
-fetch_all(data_url, model_url)
-```
