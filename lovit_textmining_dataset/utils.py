@@ -25,8 +25,11 @@ def fetch(dataset=None, content=None):
     elif content is not None:
         raise ValueError('Content must be speficied with dataset')
 
-    urls = download_fetch_urls()
-    for name, url in urls.items():
+    fetch_urls = download_fetch_urls()
+    for name in fetch_list:
+        url = fetch_urls.get(name, None)
+        if url is None:
+            raise ValueError('URL of {} is not specified'.format(name))
         dataset, content = name.split('.')
         fetch_from_a_url(dataset, content, url)
 
