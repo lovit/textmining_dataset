@@ -4,10 +4,31 @@ import zipfile
 
 installpath = os.path.dirname(os.path.realpath(__file__))
 version_url = 'https://raw.githubusercontent.com/lovit/textmining_dataset/master/lovit_textmining_dataset/versions'
+fetchurls_url = 'https://raw.githubusercontent.com/lovit/textmining_dataset/master/lovit_textmining_dataset/fetch_urls'
 wget_headers = {'user-agent': 'Wget/1.16 (linux-gnu)'}
 
 def fetch(dataset=None, content=None):
-    raise NotImplemented
+    # version check
+    fetch_list = version_check(True)
+
+    # do nothing if all data, contents are latest version
+    if not fetch_list:
+        return
+
+    # filtering fetch list
+    if dataset is not None:
+        fetch_list = [name for name in fetch_list if name.split('.')[0] == dataset]
+        if content is not None:
+            fetch_list = [name for name in fetch_list if name.split('.')[1] == content]
+
+    # Impossible (dataset=None, content='data')
+    elif content is not None:
+        raise ValueError('Content must be speficied with dataset')
+
+    urls = download_fetch_urls()
+    for name, url in urls.items():
+        dataset, content = name.split('.')
+        fetch_from_a_url(dataset, content, url)
 
 def fetch_from_a_url(dataset, content, url):
     """
@@ -24,13 +45,13 @@ def fetch_from_a_url(dataset, content, url):
     download_fname = url.split('?')[0].split('/')[-1]
     download_path = os.path.abspath('{}/{}'.format(installpath, download_fname))
     if download_a_file(url, download_path):
-        print('Success to download {} {}'.format(dataset, download_fname))
+        print('Successed to download {}.{}'.format(dataset, download_fname))
     else:
         raise IOError('Failed to download {} '.format(dataset, download_fname))
 
     unzip_path = os.path.abspath('{}/{}/{}'.format(installpath, dataset, content))
     if unzip(download_path, unzip_path):
-        print('Success to unzip {}.{}'.format(dataset, content))
+        print('Successed to unzip {}.{}'.format(dataset, content))
     else:
         raise IOError('Failed to unzip {}.{}'.format(dataset, content))
 
@@ -56,23 +77,32 @@ def version_check(return_fetch_list=False):
             print('[{}] newly uploaded. need to download'.format(name))
             fetch_list.append(name)
         elif local_ver < repo_ver:
-            print('[{}] need to be upgrade {} -> {}'.format(name, local_ver, repo_ver))
+            print('[{}] need to be upgrade ({} -> {})'.format(name, local_ver, repo_ver))
             fetch_list.append(name)
         else:
-            print('[{}] is latest version {}'.format(name, local_ver))
+            print('[{}] is latest version ({})'.format(name, local_ver))
 
     if return_fetch_list:
         return fetch_list
 
 def download_versions():
+    docs = download_as_str(version_url)
+    versions = dict(sent.split(' = ') for sent in docs.split('\n') if sent)
+    return versions
+
+def download_fetch_urls():
+    docs = download_as_str(fetchurls_url)
+    urls = dict(doc.strip().split() for doc in docs.split('\n') if doc.strip())
+    return urls
+
+def download_as_str(url):
     try:
-        r = requests.get(version_url, stream=True, headers=wget_headers)
+        r = requests.get(url, stream=True, headers=wget_headers)
         docs = ''.join([chunk.decode('utf-8') for chunk in r.iter_content(chunk_size=1024)])
-        versions = dict(sent.split(' = ') for sent in docs.split('\n') if sent)
-        return versions
+        return docs
     except Exception as e:
         print(e)
-        return False
+        raise ValueError('Failed to download version file')
 
 def download_a_file(url, fname):
     """

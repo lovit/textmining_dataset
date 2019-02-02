@@ -8,3 +8,4 @@ from .utils import fetch
 from .utils import fetch_from_a_url
 from .utils import installpath
 from .utils import version_check
+from .utils import download_fetch_urls
