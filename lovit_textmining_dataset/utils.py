@@ -6,19 +6,33 @@ installpath = os.path.dirname(os.path.realpath(__file__))
 version_url = 'https://raw.githubusercontent.com/lovit/textmining_dataset/master/lovit_textmining_dataset/versions'
 wget_headers = {'user-agent': 'Wget/1.16 (linux-gnu)'}
 
-def version_check():
+def version_check(return_fetch_list=False):
+    # load local versions
     with open('{}/versions'.format(installpath), encoding='utf-8') as f:
         local_versions = dict(doc.strip().split(' = ') for doc in f)
+
+    # download repository version
     repo_versions = download_versions()
+
+    # version check
+    fetch_list = []
     for name, repo_ver in repo_versions.items():
+
+        # prepare variables
         local_ver = local_versions.get(name, '')
         dirname = '{}/{}'.format(installpath, name.replace('.', os.sep))
+
         if not (name in local_versions) or not os.path.exists(dirname):
             print('[{}] newly uploaded. need to download'.format(name))
+            fetch_list.append(name)
         elif local_ver < repo_ver:
             print('[{}] need to be upgrade {} -> {}'.format(name, local_ver, repo_ver))
+            fetch_list.append(name)
         else:
             print('[{}] is latest version {}'.format(name, local_ver))
+
+    if return_fetch_list:
+        return fetch_list
 
 def download_versions():
     try:
