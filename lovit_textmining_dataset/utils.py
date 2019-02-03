@@ -60,7 +60,18 @@ def fetch_from_a_url(dataset, content, url):
 
     os.remove(download_path)
 
-def version_check(return_fetch_list=False):
+def version_check():
+    compare = compare_versions()
+    for name, flag, local_ver, repo_ver in compare:
+        if flag == 2:
+            message = '[{}] newly uploaded. need to download'.format(name)
+        elif flag == 1:
+            message = '[{}] need to upgrade ({} -> {})'.format(name, local_ver, repo_ver)
+        else:
+            message = '[{}] is latest ({})'.format(name, local_ver)
+        print(message)
+
+def compare_versions():
     # load local versions
     with open('{}/versions'.format(installpath), encoding='utf-8') as f:
         local_versions = dict(doc.strip().split(' = ') for doc in f)
@@ -68,8 +79,10 @@ def version_check(return_fetch_list=False):
     # download repository version
     repo_versions = download_versions()
 
-    # version check
-    fetch_list = []
+    # 0 : latest version
+    # 1 : need to be update
+    # 2 : newly uploaded
+    compare = []
     for name, repo_ver in repo_versions.items():
 
         # prepare variables
@@ -77,16 +90,14 @@ def version_check(return_fetch_list=False):
         dirname = '{}/{}'.format(installpath, name.replace('.', os.sep))
 
         if not (name in local_versions) or not os.path.exists(dirname):
-            print('[{}] newly uploaded. need to download'.format(name))
-            fetch_list.append(name)
+            flag = 2
         elif local_ver < repo_ver:
-            print('[{}] need to be upgrade ({} -> {})'.format(name, local_ver, repo_ver))
-            fetch_list.append(name)
+            flag = 1
         else:
-            print('[{}] is latest version ({})'.format(name, local_ver))
+            flag = 0
 
-    if return_fetch_list:
-        return fetch_list
+        compare.append((name, flag, local_ver, repo_ver))
+    return compare
 
 def download_versions():
     docs = download_as_str(version_url)
