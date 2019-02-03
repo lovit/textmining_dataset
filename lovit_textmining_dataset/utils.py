@@ -48,15 +48,15 @@ def fetch_from_a_url(dataset, content, url):
     download_fname = url.split('?')[0].split('/')[-1]
     download_path = os.path.abspath('{}/{}'.format(installpath, download_fname))
     if download_a_file(url, download_path):
-        print('Successed to download {}.{}'.format(dataset, download_fname))
+        print('  - successed to download {}.{}'.format(dataset, download_fname))
     else:
-        raise IOError('Failed to download {}\rurl = {}'.format(dataset, download_fname, url))
+        raise IOError('  - failed to download {}\rurl = {}'.format(dataset, download_fname, url))
 
     unzip_path = os.path.abspath('{}/{}/{}'.format(installpath, dataset, content))
     if unzip(download_path, unzip_path):
-        print('Successed to unzip {}.{}'.format(dataset, content))
+        print('  - successed to unzip {}.{}'.format(dataset, content))
     else:
-        raise IOError('Failed to unzip {}.{}'.format(dataset, content))
+        raise IOError('  - failed to unzip {}.{}'.format(dataset, content))
 
     os.remove(download_path)
 
