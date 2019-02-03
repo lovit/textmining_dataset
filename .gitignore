@@ -1,6 +1,7 @@
 # Data & Model directory
 */*/data
 */*/models
+zips
 
 # Python
 *.pyc

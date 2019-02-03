@@ -34,3 +34,7 @@ lovit_textmining_dataset
         | models
             |-- ...
 ```
+
+## zips
+
+data, models 폴더의 파일은 github 이 아닌 다른 곳에 저장되어 있으며, fetch 함수를 통하여 다운로드 받습니다. 각 zip 파일은 폴더 하위의 내용을 포함합니다. 예를 들어 navernews_10days 의 data.zip 은 navernews_10days/data/ 아래의 2016-10-20.txt 와 같은 파일을 포함하고 있습니다.
