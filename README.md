@@ -115,3 +115,10 @@ fetch(dataset='navernews_10days', content='models')
 ```python
 fetch(dataset='navernews_10days')
 ```
+
+## Dataset usage
+
+각 데이터셋마다 제공되는 함수가 다릅니다. 데이터셋의 README 에 각 데이터셋이 제공하는 함수들의 사용법을 정리하였습니다. 아래 문서들을 살펴보세요.
+
+- [navernews_10days](/lovit_textmining_dataset/navernews_10days/README.md): 2016-10-20 ~ 2016-10-29, 10 일 간의 뉴스 및 뉴스 댓글 데이터
+- [navermovie_comments](/lovit_textmining_dataset/navermovie_comments/README.md): 네이버 영화에서 수집한 영화 평, 평점 데이터
