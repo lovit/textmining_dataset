@@ -17,7 +17,38 @@ data/data_large.txt
 ...
 ```
 
-## Loader
+## Set system path
+
+이 데이터셋은 `lovit_textmining_dataset` 의 하위 패키지입니다. 아래처럼 이용할 수 있습니다.
+
+```python
+from lovit_textmining_dataset.navermovie_comments import load_lalaland_movie_comments_texts
+
+texts = load_lalaland_movie_comments_texts()
+```
+
+이 패키지만 이용할 경우에는 아래와 같이 sys.path 에 `navermovie_comments` 의 주소를 입력합니다. 이때는 fetch 를 이용할 수 없습니다.
+
+```python
+import sys
+
+navermovie_comments_path = '/abc/def/lovit_textmining_dataset/'
+sys.path.append(navermovie_comments_path)
+```
+
+아래처럼 `navermovie_comments` 에서 import 를 할 수 있습니다.
+
+```python
+from navermovie_comments import load_lalaland_movie_comments_texts
+
+texts = load_lalaland_movie_comments_texts()
+```
+
+## Functions
+
+navermovie_comments 에서는 네 가지 종류의 함수를 제공합니다.
+
+### load movie comments data
 
 데이터를 손쉽게 사용하기 위하여 다음의 함수들을 제공합니다. arguments 인 large, tokenize 를 설정할 수 있습니다. Returns 은 세 개의 tuples 입니다. 세 tuples 는 <영화 아이디, 영화 평, 영화 평점> 입니다.
 
@@ -26,24 +57,27 @@ data/data_large.txt
 | large | False | True 이면 data_large 를 이용합니다. False 이면 data_small 을 이용합니다. |
 | tokenize | None | 설정을 하지 않으면 토크나이징이 되지 않은 데이터를 읽습니다. `komoran`, `soynlp` 를 설정할 수 있습니다. |
 
-Usage examples,
 
 ```python
-from movie_comments import load_movie_comments
+from navermovie_comments import load_movie_comments
 
 idxs, texts, rates = load_movie_comments()
 idxs, texts, rates = load_movie_comments(large=False, tokenize='komoran')
 ```
+
+### load movie id dictionary
 
 영화 아이디를 key 로, 영화 이름을 value 로 지니는 Python dict 를 불러올 수 있습니다.
 
 Usage examples
 
 ```python
-from movie_comments import load_id_to_movie
+from navermovie_comments import load_id_to_movie
 
 id_to_movie = load_id_to_movie()
 ```
+
+### load tokenized bag of words model for classification
 
 Sentiment classification 용 데이터를 로딩할 수 있습니다.
 
