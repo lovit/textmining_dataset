@@ -27,7 +27,7 @@ def fetch(dataset=None, content=None):
     urls = download_fetch_urls()
     for name, flag, local_ver, repo_ver in compare:
         print_fetch_status(name, flag, local_ver, repo_ver)
-        url = fetch_urls.get(name, None)
+        url = urls.get(name, None)
         if url is None:
             raise ValueError('URL of {} is not specified'.format(name))
         dataset, content = name.split('.')
