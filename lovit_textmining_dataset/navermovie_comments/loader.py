@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import pickle
 
 installpath = os.path.dirname(os.path.realpath(__file__))
@@ -33,7 +34,15 @@ def load_movie_comments(large=False, tokenize=None, num_doc=-1, idxs=None, direc
 
     Usage
     -----
-    idxs, texts, rates = load_movie_comments(large=False, tokenize=None)
+
+        idxs, texts, rates = load_movie_comments(large=False, tokenize=None)
+        idxs, texts, rates = load_movie_comments(large=False, tokenize='komoran')
+
+        # getting raw text of La La Land
+        idxs, texts, rates = load_movie_comments(idxs='134963')
+
+        # getting text of La La Land that tokenized with Komoran
+        idxs, texts, rates = load_movie_comments(tokenize='komoran', idxs='134963')
     """
 
     # set default directory
@@ -93,7 +102,8 @@ def load_id_to_movie(directory=None):
 
     Usage
     -----
-    id_to_movie = load_id_to_movie()
+
+        id_to_movie = load_id_to_movie()
     """
 
     if directory is None:
@@ -125,6 +135,12 @@ def load_sentiment_dataset(model_name='small', tokenize='komoran', directory=Non
         1 is positive, -1 is negative
     idx_to_vocab : list of str
         Term list
+
+    Usage
+    -----
+
+        texts, x, y, idx_to_vocab = load_sentiment_dataset(model_name='10k', tokenize='komoran')
+        texts, x, y, idx_to_vocab = load_sentiment_dataset(model_name='small', tokenize='komoran')
     """
 
     # set default directory
@@ -150,6 +166,8 @@ def load_sentiment_dataset(model_name='small', tokenize='komoran', directory=Non
         x = pickle.load(f)
     with open(y_path, 'rb') as f:
         y = pickle.load(f)
+    if isinstance(y, list):
+        y = np.asarray(y, dtype=np.int)
     with open(vocab_path, encoding='utf-8') as f:
         idx_to_vocab = [vocab.strip() for vocab in f]
 
