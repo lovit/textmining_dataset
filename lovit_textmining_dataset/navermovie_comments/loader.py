@@ -2,7 +2,6 @@ import os
 import pickle
 
 installpath = os.path.dirname(os.path.realpath(__file__))
-print('navermovie installpath = %s' % installpath)
 
 def load_lalaland_movie_comments_texts(tokenize=None, directory=None):
     """
