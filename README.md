@@ -35,6 +35,83 @@ lovit_textmining_dataset
             |-- ...
 ```
 
-## zips
+## Install
 
-data, models 폴더의 파일은 github 이 아닌 다른 곳에 저장되어 있으며, fetch 함수를 통하여 다운로드 받습니다. 각 zip 파일은 폴더 하위의 내용을 포함합니다. 예를 들어 navernews_10days 의 data.zip 은 navernews_10days/data/ 아래의 2016-10-20.txt 와 같은 파일을 포함하고 있습니다.
+Github 에 데이터 파일을 저장하면 불편한 점들이 있어서 github 에서는 패키지 함수들을 제공하고, 이 함수를 이용하여 모델을 다운로드 받습니다. 즉 github 의 코드에는 위의 디렉토리 구조에서 `navermovie_comments/loader.py` 는 존재하지만, `navermovie_comments/data` 폴더는 존재하지 않습니다. 이는 `fetch` 함수를 이용하여 다운로드 합니다.
+
+데이터 패키지는 git clone 을 이용하여 설치합니다.
+
+```
+git clone https://github.com/lovit/textmining-dataset.git
+```
+
+설치 후 `version_check` 함수를 이용하여 현재 설치된 데이터들과 설치해야 할 데이터들을 확인합니다. local 의 버전과 data repository 의 버전을 확인합니다.
+
+```python
+from lovit_textmining_dataset import version_check
+
+version_check()
+```
+
+README 작성 당시 두 개의 데이터셋 각각 data 와 models 를 제공하고 있습니다. 네 개의 파일 모두 설치가 되지 않았다는 메시지가 출력됩니다.
+
+```
+[navermovie_comments.data] newly uploaded. need to download
+[navermovie_comments.models] newly uploaded. need to download
+[navernews_10days.data] newly uploaded. need to download
+[navernews_10days.models] newly uploaded. need to download
+```
+
+`fetch` 함수를 이용하여 데이터를 다운로드 받습니다.
+
+```python
+from lovit_textmining_dataset import fetch
+
+fetch()
+```
+
+Update 혹은 download 해야 하는 파일들을 다운로드 받아 설치합니다.
+
+```
+[navermovie_comments.data] newly uploaded. need to download
+  - successed to download navermovie_comments.data.zip
+  - successed to unzip navermovie_comments.data
+[navermovie_comments.models] newly uploaded. need to download
+  - successed to download navermovie_comments.models.zip
+  - successed to unzip navermovie_comments.models
+[navernews_10days.data] newly uploaded. need to download
+  - successed to download navernews_10days.data.zip
+  - successed to unzip navernews_10days.data
+[navernews_10days.models] newly uploaded. need to download
+  - successed to download navernews_10days.models.zip
+  - successed to unzip navernews_10days.models
+```
+
+설치가 완료되면 `version_check` 나 `fetch` 를 실행시켜도 아래처럼 메시지가 출력됩니다.
+
+```pyton
+fetch() # or version_check()
+```
+
+```
+[navermovie_comments.data] is latest version (0.0.1)
+[navermovie_comments.models] is latest version (0.0.1)
+[navernews_10days.data] is latest version (0.0.1)
+[navernews_10days.models] is latest version (0.0.1)
+```
+
+### Download only a data
+
+모든 데이터가 아닌 하나의 데이터만을 download 혹은 update 할 수 있습니다.
+
+`navernews_10days` 의 models 만 업데이트 하려면 아래처럼 입력합니다. `content` 는 dataset 의 하위 폴더 입니다.
+
+```python
+fetch(dataset='navernews_10days', content='models')
+```
+
+`navernews_10days` 의 `data` 와 `models` 를 모두 다운로드 하려면 `dataset` 만 지정합니다.
+
+```python
+fetch(dataset='navernews_10days')
+```
