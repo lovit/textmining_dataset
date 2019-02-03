@@ -5,6 +5,28 @@ from glob import glob
 installpath = os.path.dirname(os.path.realpath(__file__))
 
 def get_news_paths(tokenize=None, date=None):
+    """
+    Arguments
+    ---------
+    tokenize : None or str
+        Tokenizer name
+    date : str
+        yyyy-mm-dd form
+
+    Returns
+    -------
+    If date is None, it returns list of str
+        List of absolute paths
+    If date is specified, it returns str
+
+    Usage
+    -----
+
+        paths = get_news_paths() # list of str type
+        paths = get_news_paths(tokenize='komoran') # list of str type
+        path = get_news_paths(date='2016-10-20', tokenize='komoran') # str type
+    """
+
     if tokenize == 'komoran':
         suffix = '_komoran.txt'
     else:
@@ -25,6 +47,25 @@ def get_news_paths(tokenize=None, date=None):
     return paths
 
 def get_news_index_paths(date=None):
+    """
+    Arguments
+    ---------
+    date : str
+        yyyy-mm-dd form
+
+    Returns
+    -------
+    If date is None, it returns list of str
+        List of absolute paths
+    If date is specified, it returns str
+
+    Usage
+    -----
+
+        paths = get_news_index_paths() # list of str type
+        path = get_news_index_paths(date='2016-10-20') # str type
+    """
+
     if isinstance(date, str):
         path = '{}/data/news/{}.index'.format(installpath, date)
         path = os.path.abspath(path)
@@ -37,6 +78,28 @@ def get_news_index_paths(date=None):
     return paths
 
 def get_comments_paths(tokenize=None, date=None):
+    """
+    Arguments
+    ---------
+    tokenize : None or str
+        Tokenizer name
+    date : str
+        yyyy-mm-dd form
+
+    Returns
+    -------
+    If date is None, it returns list of str
+        List of absolute paths
+    If date is specified, it returns str
+
+    Usage
+    -----
+
+        paths = get_comments_paths() # list of str type
+        paths = get_comments_paths(tokenize='komoran') # list of str type
+        path = get_comments_paths(date='2016-10-20', tokenize='komoran') # str type
+    """
+
     if tokenize == 'komoran':
         suffix = '_komoran.txt'
     else:
@@ -57,6 +120,25 @@ def get_comments_paths(tokenize=None, date=None):
     return paths
 
 def get_comments_index_paths(date=None):
+    """
+    Arguments
+    ---------
+    date : str
+        yyyy-mm-dd form
+
+    Returns
+    -------
+    If date is None, it returns list of str
+        List of absolute paths
+    If date is specified, it returns str
+
+    Usage
+    -----
+
+        paths = get_comments_index_paths() # list of str type
+        path = get_comments_index_paths(date='2016-10-20') # str type
+    """
+
     if isinstance(date, str):
         path = '{}/data/comments/{}.index'.format(installpath, date)
         path = os.path.abspath(path)
@@ -69,6 +151,31 @@ def get_comments_index_paths(date=None):
     return paths
 
 def get_bow(date='2016-10-20', tokenize='noun'):
+    """
+    Arguments
+    ---------
+    date : str
+        yyyy-mm-dd form
+    tokenize : str
+        Tokenizer name that used to create Bag of words model
+
+    Returns
+    -------
+    x : scipy.sparse.csr_matrix
+        Bag of Words Model with shape = (n_docs, n_terms)
+    idx_to_vocab : list of str
+        Vocabulary list with len(idx_to_vocab) == n_terms
+    vocab_to_idx : {str:int}
+        Vocabulary to index dictionary with len(vocab_to_idx) == n_terms
+
+    Usage
+    -----
+
+        x, idx_to_vocab, vocab_to_idx = get_bow()
+        # or
+        x, idx_to_vocab, vocab_to_idx = get_bow(date='2016-10-20', tokenize='noun')
+    """
+
     path = '{}/models/{}_bow_{}.pkl'.format(installpath, date, tokenize)
     with open(path, 'rb') as f:
         params = pickle.load(f)
