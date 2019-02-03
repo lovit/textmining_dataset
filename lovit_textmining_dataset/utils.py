@@ -8,6 +8,28 @@ fetchurls_url = 'https://raw.githubusercontent.com/lovit/textmining_dataset/mast
 wget_headers = {'user-agent': 'Wget/1.16 (linux-gnu)'}
 
 def fetch(dataset=None, content=None):
+    """
+    Arguments
+    ---------
+    dataset : str or None
+        Dataset name
+    content : str or None
+        Content of dataset name. It could be specified only when dataset is not None.
+
+    Usage
+    -----
+
+        from lovit_textmining_dataset import fetch
+
+        fetch()
+
+        # or
+        fetch(dataset='navernews_10days')
+
+        # or
+        fetch(dataset='navernews_10days', content='models')
+    """
+
     def filter(compare):
         if dataset is None and content is not None:
             raise ValueError('Content must be speficied with dataset')
@@ -41,8 +63,12 @@ def fetch_from_a_url(dataset, content, url):
         URL of file to be downloaded
     download_fname : str
         Path of local download file
-    directory : str
-        Directory path for unzip
+
+    Usage
+    -----
+
+        repository_url = 'https://...'
+        fetch(dataset='navernews_10days', content='models', url=repository_url)
     """
 
     download_fname = url.split('?')[0].split('/')[-1]
@@ -61,6 +87,17 @@ def fetch_from_a_url(dataset, content, url):
     os.remove(download_path)
 
 def version_check():
+    """
+    It shows version of dataset installed and repository-stored
+
+    Usage
+    -----
+
+        from lovit_textmining_dataset import version_check
+
+        version_check()
+    """
+
     compare = compare_versions()
     for name, flag, local_ver, repo_ver in compare:
         print_fetch_status(name, flag, local_ver, repo_ver)
