@@ -50,7 +50,7 @@ def fetch_from_a_url(dataset, content, url):
     if download_a_file(url, download_path):
         print('Successed to download {}.{}'.format(dataset, download_fname))
     else:
-        raise IOError('Failed to download {} '.format(dataset, download_fname))
+        raise IOError('Failed to download {}\rurl = {}'.format(dataset, download_fname, url))
 
     unzip_path = os.path.abspath('{}/{}/{}'.format(installpath, dataset, content))
     if unzip(download_path, unzip_path):
