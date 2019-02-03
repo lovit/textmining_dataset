@@ -22,9 +22,9 @@ data/data_large.txt
 이 데이터셋은 `lovit_textmining_dataset` 의 하위 패키지입니다. 아래처럼 이용할 수 있습니다.
 
 ```python
-from lovit_textmining_dataset.navermovie_comments import load_lalaland_movie_comments_texts
+from lovit_textmining_dataset.navermovie_comments import load_movie_comments
 
-texts = load_lalaland_movie_comments_texts()
+idxs, texts, rates = load_movie_comments()
 ```
 
 이 패키지만 이용할 경우에는 아래와 같이 sys.path 에 `navermovie_comments` 의 주소를 입력합니다. 이때는 fetch 를 이용할 수 없습니다.
@@ -39,14 +39,14 @@ sys.path.append(navermovie_comments_path)
 아래처럼 `navermovie_comments` 에서 import 를 할 수 있습니다.
 
 ```python
-from navermovie_comments import load_lalaland_movie_comments_texts
+from navermovie_comments import load_movie_comments
 
-texts = load_lalaland_movie_comments_texts()
+idxs, texts, rates = load_movie_comments()
 ```
 
 ## Functions
 
-navermovie_comments 에서는 네 가지 종류의 함수를 제공합니다.
+navermovie_comments 에서는 세 가지 종류의 함수를 제공합니다.
 
 ### load movie comments data
 

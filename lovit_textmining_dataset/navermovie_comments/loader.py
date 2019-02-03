@@ -3,32 +3,8 @@ import pickle
 
 installpath = os.path.dirname(os.path.realpath(__file__))
 
-def load_lalaland_movie_comments_texts(tokenize=None, directory=None):
-    """
-    Arguments
-    ---------
-    tokenzie : None or str
-        If None, it returns raw (not-tokenized) texts
-        Choose ['komoran', 'soynlp']
 
-    Returns
-    -------    
-    texts : list of str
-        라라랜드 영화 평 리스트
-
-    Usage
-    -----
-    texts = load_lalaland_movie_comments_texts(tokenize='komoran')
-    """
-
-    idxs, texts, rates = load_movie_comments(tokenize=tokenize, directory=directory)
-    texts_ = []
-    for idx, text, rate in zip(idxs, texts, rates):
-        if idx == '134963' and text.strip():
-            texts_.append(text.strip())
-    return texts_
-
-def load_movie_comments(large=False, tokenize=None, num_doc=-1, directory=None):
+def load_movie_comments(large=False, tokenize=None, num_doc=-1, idxs=None, directory=None):
     """
     Arguments
     ---------
@@ -42,6 +18,9 @@ def load_movie_comments(large=False, tokenize=None, num_doc=-1, directory=None):
     num_doc : int
         The number of sampled data.
         Default is -1 (all data)
+    idxs : set of str
+        Specific movie id set
+        Defaulf is None, load data of all movies
 
     Returns
     -------    
@@ -81,6 +60,12 @@ def load_movie_comments(large=False, tokenize=None, num_doc=-1, directory=None):
 
     # check format
     docs = [doc for doc in docs if len(doc) == 3]
+
+    # check idx
+    if idxs is not None:
+        if isinstance(idxs, str):
+            idxs = {idxs}
+        docs = [doc for doc in docs if doc[0] in idxs]
 
     # select
     if num_doc > 0:
