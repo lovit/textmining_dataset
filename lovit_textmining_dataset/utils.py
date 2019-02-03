@@ -8,25 +8,25 @@ fetchurls_url = 'https://raw.githubusercontent.com/lovit/textmining_dataset/mast
 wget_headers = {'user-agent': 'Wget/1.16 (linux-gnu)'}
 
 def fetch(dataset=None, content=None):
-    # version check
-    fetch_list = version_check(True)
-
-    # do nothing if all data, contents are latest version
-    if not fetch_list:
-        return
-
-    # filtering fetch list
-    if dataset is not None:
-        fetch_list = [name for name in fetch_list if name.split('.')[0] == dataset]
+    def filter(compare):
+        if dataset is None and content is not None:
+            raise ValueError('Content must be speficied with dataset')
+        if dataset is not None:
+            compare = [cols for cols in compare if cols[0].split('.')[0] == dataset]
         if content is not None:
-            fetch_list = [name for name in fetch_list if name.split('.')[1] == content]
+            compare = [cols for cols in compare if cols[0].split('.')[1] == content]
+        return compare
 
-    # Impossible (dataset=None, content='data')
-    elif content is not None:
-        raise ValueError('Content must be speficied with dataset')
+    # version check
+    compare = compare_versions()
 
-    fetch_urls = download_fetch_urls()
-    for name in fetch_list:
+    # argument check
+    compare = filter(compare)
+
+    # fetch
+    urls = download_fetch_urls()
+    for name, flag, local_ver, repo_ver in compare:
+        print_fetch_status(name, flag, local_ver, repo_ver)
         url = fetch_urls.get(name, None)
         if url is None:
             raise ValueError('URL of {} is not specified'.format(name))
@@ -63,13 +63,16 @@ def fetch_from_a_url(dataset, content, url):
 def version_check():
     compare = compare_versions()
     for name, flag, local_ver, repo_ver in compare:
-        if flag == 2:
-            message = '[{}] newly uploaded. need to download'.format(name)
-        elif flag == 1:
-            message = '[{}] need to upgrade ({} -> {})'.format(name, local_ver, repo_ver)
-        else:
-            message = '[{}] is latest ({})'.format(name, local_ver)
-        print(message)
+        print_fetch_status(name, flag, local_ver, repo_ver)
+
+def print_fetch_status(name, flag, local_ver, repo_ver):
+    if flag == 2:
+        message = '[{}] newly uploaded. need to download'.format(name)
+    elif flag == 1:
+        message = '[{}] need to upgrade ({} -> {})'.format(name, local_ver, repo_ver)
+    else:
+        message = '[{}] is latest ({})'.format(name, local_ver)
+    print(message)
 
 def compare_versions():
     # load local versions
