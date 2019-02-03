@@ -5,10 +5,11 @@ from glob import glob
 installpath = os.path.dirname(os.path.realpath(__file__))
 
 def get_news_paths(tokenize=None, date=None):
-    if tokenize is None:
-        suffix = '.txt'
-    elif tokenize == 'komoran':
+    if tokenize == 'komoran':
         suffix = '_komoran.txt'
+    else:
+        tokenize = None
+        suffix = '.txt'
 
     if isinstance(date, str):
         path = '{}/data/news/{}{}'.format(installpath, date, suffix)
@@ -36,10 +37,11 @@ def get_news_index_paths(date=None):
     return paths
 
 def get_comments_paths(tokenize=None, date=None):
-    if tokenize is None:
-        suffix = '.txt'
-    elif tokenize == 'komoran':
+    if tokenize == 'komoran':
         suffix = '_komoran.txt'
+    else:
+        tokenize = None
+        suffix = '.txt'
 
     if isinstance(date, str):
         path = '{}/data/comments/{}{}'.format(installpath, date, suffix)
