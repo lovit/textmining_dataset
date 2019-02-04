@@ -49,6 +49,8 @@ def fetch(dataset=None, content=None):
     urls = download_fetch_urls()
     for name, flag, local_ver, repo_ver in compare:
         print_fetch_status(name, flag, local_ver, repo_ver)
+        if flag == 0:
+            continue
         url = urls.get(name, None)
         if url is None:
             raise ValueError('URL of {} is not specified'.format(name))
