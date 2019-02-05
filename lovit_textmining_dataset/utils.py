@@ -132,7 +132,7 @@ def print_fetch_status(name, flag, local_ver, repo_ver):
     print(message)
 
 def read_local_version():
-    if not os.path.exists(version_phat):
+    if not os.path.exists(version_path):
         return {}
     with open(version_path, encoding='utf-8') as f:
         local_versions = dict(doc.strip().split(' = ') for doc in f)
