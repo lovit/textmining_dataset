@@ -3,7 +3,8 @@ import requests
 import zipfile
 
 installpath = os.path.dirname(os.path.realpath(__file__))
-version_url = 'https://raw.githubusercontent.com/lovit/textmining_dataset/master/lovit_textmining_dataset/versions'
+version_url = 'https://s3.ap-northeast-2.amazonaws.com/lovit-textmining-dataset/versions'
+version_path = '{}/versions'.format(installpath)
 fetchurls_url = 'https://raw.githubusercontent.com/lovit/textmining_dataset/master/lovit_textmining_dataset/fetch_urls'
 wget_headers = {'user-agent': 'Wget/1.16 (linux-gnu)'}
 
@@ -115,7 +116,7 @@ def print_fetch_status(name, flag, local_ver, repo_ver):
 
 def compare_versions():
     # load local versions
-    with open('{}/versions'.format(installpath), encoding='utf-8') as f:
+    with open(version_path, encoding='utf-8') as f:
         local_versions = dict(doc.strip().split(' = ') for doc in f)
 
     # download repository version
