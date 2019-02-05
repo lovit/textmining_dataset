@@ -234,6 +234,8 @@ def load_trained_embedding(data_name='large', tokenize='soynlp_unsup',
         tokenization = 'komoran'
     elif tokenize is 'soynlp_unsup':
         tokenization = 'soynlp_unsup'
+    elif tokenize is 'fasttext':
+        tokenization = 'fasttext'
     else:
         raise ValueError('Set tokenize as komoran or soynlp')
 
