@@ -135,12 +135,12 @@ def load_id_to_movie(directory=None):
         id_to_movie =  pickle.load(f)
     return id_to_movie
 
-def load_sentiment_dataset(model_name='small', tokenize='komoran', directory=None):
+def load_sentiment_dataset(data_name='small', tokenize='komoran', directory=None):
     """
     Arguments
     ---------
-    model_name : str
-        Tokenized model name. Choose ['small', '10k']
+    data_name : str
+        Tokenized data name. Choose ['small', '10k']
         Default is small
     tokenzie : str
         Choose ['komoran', 'soynlp_unsup']
@@ -161,8 +161,8 @@ def load_sentiment_dataset(model_name='small', tokenize='komoran', directory=Non
     Usage
     -----
 
-        texts, x, y, idx_to_vocab = load_sentiment_dataset(model_name='10k', tokenize='komoran')
-        texts, x, y, idx_to_vocab = load_sentiment_dataset(model_name='small', tokenize='komoran')
+        texts, x, y, idx_to_vocab = load_sentiment_dataset(data_name='10k', tokenize='komoran')
+        texts, x, y, idx_to_vocab = load_sentiment_dataset(data_name='small', tokenize='komoran')
     """
 
     # set default directory
@@ -177,10 +177,10 @@ def load_sentiment_dataset(model_name='small', tokenize='komoran', directory=Non
     else:
         raise ValueError('Set tokenize as komoran or soynlp')
 
-    texts_path = '{}/sentiment_{}{}_texts.txt'.format(directory, model_name, tokenization)
-    x_path = '{}/sentiment_{}{}_x.pkl'.format(directory, model_name, tokenization)
-    y_path = '{}/sentiment_{}{}_y.pkl'.format(directory, model_name, tokenization)
-    vocab_path = '{}/sentiment_{}{}_vocab.txt'.format(directory, model_name, tokenization)
+    texts_path = '{}/sentiment_{}{}_texts.txt'.format(directory, data_name, tokenization)
+    x_path = '{}/sentiment_{}{}_x.pkl'.format(directory, data_name, tokenization)
+    y_path = '{}/sentiment_{}{}_y.pkl'.format(directory, data_name, tokenization)
+    vocab_path = '{}/sentiment_{}{}_vocab.txt'.format(directory, data_name, tokenization)
 
     with open(texts_path, encoding='utf-8') as f:
         texts = [text.split() for text in f]
@@ -194,3 +194,48 @@ def load_sentiment_dataset(model_name='small', tokenize='komoran', directory=Non
         idx_to_vocab = [vocab.strip() for vocab in f]
 
     return texts, x, y, idx_to_vocab
+
+def load_trained_embedding(data_name='large', tokenize='soynlp_unsup',
+    embedding='word2vec', directory=None):
+    """
+    Arguments
+    ---------
+    data_name : str
+        Tokenized data name. Choose ['small', 'large']
+        Default is large
+    tokenzie : str
+        Choose ['komoran', 'soynlp_unsup']
+        Default is 'soynlp_unsup'
+    embedding : str
+        Choose ['word2vec', 'doc2vec', 'fasttext']
+        Default is 'word2vec'
+
+    Returns
+    -------
+    trained_model
+
+    Usage
+    -----
+
+        word2vec_model = load_sentiment_dataset(data_name='large',
+            tokenize='soynlp_unsup', embedding='word2vec')
+    """
+
+    # set default directory
+    if directory is None:
+        directory = '{}/models/'.format(installpath)
+
+    # set tokenizer type
+    if tokenize is 'komoran':
+        tokenization = 'komoran'
+    elif tokenize is 'soynlp_unsup':
+        tokenization = 'soynlp_unsup'
+    else:
+        raise ValueError('Set tokenize as komoran or soynlp')
+
+    path = '{}/models/{}_{}_{}_gensim3-6.pkl'.format(installpath, embedding, data_name, tokenization)
+    if not os.path.exists(path):
+        raise ValueError('Not yet trained {}'.format(path))
+
+    with open(path, 'rb') as f:
+        return pickle.load(f)
