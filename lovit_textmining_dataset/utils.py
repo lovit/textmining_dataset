@@ -56,16 +56,23 @@ def fetch(dataset=None, content=None):
         if url is None:
             raise ValueError('URL of {} is not specified'.format(name))
         dataset, content = name.split('.')
-        fetch_from_a_url(dataset, content, url)
+        fetch_from_a_url(dataset, content, url, update_local_version=False)
 
-def fetch_from_a_url(dataset, content, url):
+    # update local version
+    download_a_file(version_url, version_path)
+
+def fetch_from_a_url(dataset, content, url, update_local_version=True):
     """
     Arguments
     ---------
+    dataset : str
+        Dataset name
+    content : str
+        Content name
     url : str
         URL of file to be downloaded
-    download_fname : str
-        Path of local download file
+    update_local_version : Boolean
+        If True, update local version. Default is True.
 
     Usage
     -----
@@ -88,6 +95,16 @@ def fetch_from_a_url(dataset, content, url):
         raise IOError('  - failed to unzip {}.{}'.format(dataset, content))
 
     os.remove(download_path)
+
+    if not update_local_version:
+        return
+
+    # update versions
+    local_ver = read_local_version()
+    repo_ver = download_versions()
+    key = '{}.{}'.format(dataset, content)
+    local_ver[key] = repo_ver[key]
+    write_local_version(local_ver)
 
 def version_check():
     """
@@ -114,10 +131,22 @@ def print_fetch_status(name, flag, local_ver, repo_ver):
         message = '[{}] is latest ({})'.format(name, local_ver)
     print(message)
 
-def compare_versions():
-    # load local versions
+def read_local_version():
+    if not os.path.exists(version_phat):
+        return {}
     with open(version_path, encoding='utf-8') as f:
         local_versions = dict(doc.strip().split(' = ') for doc in f)
+    return local_versions
+
+def write_local_version(versions):
+    with open(version_path, 'w', encoding='utf-8') as f:
+        for name, ver in versions.items():
+            f.write('{} = {}\n'.format(name, ver))
+
+def compare_versions():
+
+    # read local version
+    local_versions = read_local_version()
 
     # download repository version
     repo_versions = download_versions()
