@@ -14,7 +14,7 @@ def get_movie_comments_path(large=False, tokenize=None, directory=None):
         Default is False
     tokenzie : None or str
         If None, it returns raw (not-tokenized) texts
-        Choose ['komoran', 'soynlp_unsup']
+        Choose ['komoran', 'soynlp_unsup', 'fasttext']
 
     Returns
     -------
@@ -34,6 +34,8 @@ def get_movie_comments_path(large=False, tokenize=None, directory=None):
         tokenization = '_komoran'
     elif tokenize is 'soynlp_unsup':
         tokenization = '_soynlp_unsup'
+    elif tokenize is 'fasttext':
+        tokenization = '_fasttext'
     else:
         tokenization = ''
 
@@ -51,7 +53,7 @@ def load_movie_comments(large=False, tokenize=None, num_doc=-1, idxs=None, direc
         Default is False
     tokenzie : None or str
         If None, it returns raw (not-tokenized) texts
-        Choose ['komoran', 'soynlp_unsup']
+        Choose ['komoran', 'soynlp_unsup', 'fasttext']
     num_doc : int
         The number of sampled data.
         Default is -1 (all data)
@@ -174,6 +176,8 @@ def load_sentiment_dataset(data_name='small', tokenize='komoran', directory=None
         tokenization = '_komoran'
     elif tokenize is 'soynlp_unsup':
         tokenization = '_soynlp_unsup'
+    elif tokenize is 'fasttext':
+        tokenization = '_fasttext'
     else:
         raise ValueError('Set tokenize as komoran or soynlp')
 
