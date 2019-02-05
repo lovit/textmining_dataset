@@ -9,6 +9,7 @@ __pycache__
 
 # IPython notebook
 *.ipynb_checkpoints
+config.py
 
 # Mac
 .DS_Store
