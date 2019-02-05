@@ -4,6 +4,42 @@ import pickle
 
 installpath = os.path.dirname(os.path.realpath(__file__))
 
+def get_movie_comments_path(large=False, tokenize=None, directory=None):
+    """
+    Arguments
+    ---------
+    large : Booolean
+        If True it returns data_large.
+        Else, it returns data_small.
+        Default is False
+    tokenzie : None or str
+        If None, it returns raw (not-tokenized) texts
+        Choose ['komoran', 'soynlp_unsup']
+
+    Returns
+    -------
+    path : str
+        File path
+    """
+
+    # set default directory
+    if directory is None:
+        directory = '{}/data/'.format(installpath)
+
+    # set data size
+    size = 'large' if large else 'small'
+
+    # set tokenizer type
+    if tokenize is 'komoran':
+        tokenization = '_komoran'
+    elif tokenize is 'soynlp_unsup':
+        tokenization = '_soynlp_unsup'
+    else:
+        tokenization = ''
+
+    # set data path
+    path = '{}/data_{}{}.txt'.format(directory, size, tokenization)
+    return path
 
 def load_movie_comments(large=False, tokenize=None, num_doc=-1, idxs=None, directory=None):
     """
@@ -15,7 +51,7 @@ def load_movie_comments(large=False, tokenize=None, num_doc=-1, idxs=None, direc
         Default is False
     tokenzie : None or str
         If None, it returns raw (not-tokenized) texts
-        Choose ['komoran', 'soynlp']
+        Choose ['komoran', 'soynlp_unsup']
     num_doc : int
         The number of sampled data.
         Default is -1 (all data)
@@ -37,31 +73,17 @@ def load_movie_comments(large=False, tokenize=None, num_doc=-1, idxs=None, direc
 
         idxs, texts, rates = load_movie_comments(large=False, tokenize=None)
         idxs, texts, rates = load_movie_comments(large=False, tokenize='komoran')
+        idxs, texts, rates = load_movie_comments(large=False, tokenize='soynlp_unsup')
 
         # getting raw text of La La Land
         idxs, texts, rates = load_movie_comments(idxs='134963')
 
         # getting text of La La Land that tokenized with Komoran
-        idxs, texts, rates = load_movie_comments(tokenize='komoran', idxs='134963')
+        idxs, texts, rates = load_movie_comments(tokenize='soynlp_unsup', idxs='134963')
     """
 
-    # set default directory
-    if directory is None:
-        directory = '{}/data/'.format(installpath)
-
-    # set data size
-    size = 'large' if large else 'small'
-
-    # set tokenizer type
-    if tokenize is 'komoran':
-        tokenization = '_komoran'
-    elif tokenize is 'soynlp':
-        tokenization = '_soynlp'
-    else:
-        tokenization = ''
-
-    # set data path
-    path = '{}/data_{}{}.txt'.format(directory, size, tokenization)
+    # get path
+    path = get_movie_comments_path(large, tokenize, directory)
 
     # load data
     with open(path, encoding='utf-8') as f:
@@ -121,7 +143,7 @@ def load_sentiment_dataset(model_name='small', tokenize='komoran', directory=Non
         Tokenized model name. Choose ['small', '10k']
         Default is small
     tokenzie : str
-        Choose ['komoran', 'soynlp']
+        Choose ['komoran', 'soynlp_unsup']
         Default is 'komoran'
 
     Returns
@@ -150,8 +172,8 @@ def load_sentiment_dataset(model_name='small', tokenize='komoran', directory=Non
     # set tokenizer type
     if tokenize is 'komoran':
         tokenization = '_komoran'
-    elif tokenize is 'soynlp':
-        tokenization = '_soynlp'
+    elif tokenize is 'soynlp_unsup':
+        tokenization = '_soynlp_unsup'
     else:
         raise ValueError('Set tokenize as komoran or soynlp')
 

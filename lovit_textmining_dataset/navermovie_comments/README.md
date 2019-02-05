@@ -55,7 +55,7 @@ navermovie_comments 에서는 세 가지 종류의 함수를 제공합니다.
 | Argument | Default | Description |
 | --- | --- | --- |
 | large | False | True 이면 data_large 를 이용합니다. <br>False 이면 data_small 을 이용합니다. |
-| tokenize | None | 설정을 하지 않으면 토크나이징이 되지 않은 데이터를 읽습니다. <br>`komoran`, `soynlp` 를 설정할 수 있습니다. |
+| tokenize | None | 설정을 하지 않으면 토크나이징이 되지 않은 데이터를 읽습니다. <br>`komoran`, `soynlp_unsup` 를 설정할 수 있습니다. |
 | num_doc | -1 | 로딩하는 문서의 최대 개수로, 지정하지 않으면 모든 데이터를 가져옵니다.<br>값을 지정할 경우, 파일의 앞에서부터 num_doc 줄의 정보를 return 합니다|
 | idxs | None | str 형식으로 한 영화의 id 나 set of str 형식으로 여러 영화의 id 를 입력합니다.<br>해당 영화들의 정보만을 return 합니다. 기본값은 모든 영화 입니다|
 
@@ -64,6 +64,7 @@ from navermovie_comments import load_movie_comments
 
 idxs, texts, rates = load_movie_comments()
 idxs, texts, rates = load_movie_comments(large=False, tokenize='komoran')
+idxs, texts, rates = load_movie_comments(large=False, tokenize='soynlp_unsup')
 ```
 
 영화 `라라랜드`의 아이디는 `134963` 입니다. 이를 입력하면 영화 라라랜드의 정보들을 가져올 수 있습니다.
