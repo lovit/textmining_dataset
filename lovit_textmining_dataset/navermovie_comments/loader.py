@@ -43,6 +43,38 @@ def get_movie_comments_path(large=False, tokenize=None, directory=None):
     path = '{}/data_{}{}.txt'.format(directory, size, tokenization)
     return path
 
+def get_facebook_fasttext_data(large=False, supervise=False, directory=None):
+    """
+    Arguments
+    ---------
+    large : Booolean
+        If True, it returns data_large.
+        Else, it returns data_small.
+        Default is False
+    supervise : Boolean
+        If True, it returns path of data for supervised FastText
+        Else, it returns path of data for unsupervised (subword) FastText
+
+    Returns
+    -------
+    path : str
+        File path
+    """
+
+    # set default directory
+    if directory is None:
+        directory = '{}/data/'.format(installpath)
+
+    # set data size
+    size = 'large' if large else 'small'
+
+    # suffix
+    suffix = 'classification' if supervise else 'subword'
+
+    # set data path
+    path = '{}/data_{}_fasttext_facebook_{}.txt'.format(directory, size, suffix)
+    return path
+
 def load_movie_comments(large=False, tokenize=None, num_doc=-1, idxs=None, directory=None):
     """
     Arguments
