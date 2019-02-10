@@ -93,3 +93,19 @@ Sentiment classification 용 데이터를 로딩할 수 있습니다.
 ```python
 x, y, idx_to_vocab = load_sentiment_dataset(model_name='10k', tokenize='komoran')
 ```
+
+### Facebook Research FastText
+
+Facebook Research 에서 제공하는 FastText 는 unsupervised 와 supervised embedding 방법을 모두 제공합니다. 이들은 text file path 를 input 으로 받습니다. 이 알고리즘의 실습을 위하여 만든 영화 리뷰 데이터의 path 를 가져올 수 있습니다. 이 데이터는 한글의 초/중/종성이 분리되어 있으며, 종성이 빈칸일 경우 (받침이 없을 경우)에는 '-' 처리가 되어 있습니다.
+
+| Argument | Type | Default | Help |
+| --- | --- | --- | --- |
+| large | Boolean | False | True 이면 data_large 를 이용합니다 |
+| supervise | Boolean | False | True 이면 supervised FastText 용 데이터 path 를 return 합니다.</br>띄어쓰기 기준 맨 앞 단어에 `__label__pos` 나 `__label__neg` 처럼 sentiment label 이 추가되어 있습니다.<br>False 이면 unsupervised (subword) FastText 용 데이터 path 가 return 됩니다.</br>이 데이터는 초/중/종성이 분리된 한글로만 이뤄져 있습니다.|
+
+```python
+from navermovie_comments import get_facebook_fasttext_data
+
+path = get_facebook_fasttext_data(large=False, supervise=False)
+path = get_facebook_fasttext_data(large=False, supervise=True)
+```
