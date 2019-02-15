@@ -1,8 +1,17 @@
+from glob import glob
 import os
 import numpy as np
 import pickle
 
 installpath = os.path.dirname(os.path.realpath(__file__))
+available_tokenize = {'soynlp_unsup', 'fasttext', 'komoran', 'soynlp_cohesion'}
+
+def check_tokenize(tokenize):
+    if tokenize is None:
+        return ''
+    if (not tokenize in available_tokenize) or not isinstance(tokenize, str):
+        raise ValueError('does not provide tokenize = {}'.format(tokenize))
+    return '_{}'.format(tokenize)
 
 def get_movie_comments_path(large=False, tokenize=None, directory=None):
     """
@@ -14,7 +23,7 @@ def get_movie_comments_path(large=False, tokenize=None, directory=None):
         Default is False
     tokenzie : None or str
         If None, it returns raw (not-tokenized) texts
-        Choose ['komoran', 'soynlp_unsup', 'fasttext']
+        Choose ['komoran', 'fasttext', 'soynlp_cohesion', 'soynlp_unsup']
 
     Returns
     -------
@@ -30,17 +39,10 @@ def get_movie_comments_path(large=False, tokenize=None, directory=None):
     size = 'large' if large else 'small'
 
     # set tokenizer type
-    if tokenize is 'komoran':
-        tokenization = '_komoran'
-    elif tokenize is 'soynlp_unsup':
-        tokenization = '_soynlp_unsup'
-    elif tokenize is 'fasttext':
-        tokenization = '_fasttext'
-    else:
-        tokenization = ''
+    tokenize = check_tokenize(tokenize)
 
     # set data path
-    path = '{}/data_{}{}.txt'.format(directory, size, tokenization)
+    path = '{}/data_{}{}.txt'.format(directory, size, tokenize)
     return path
 
 def get_facebook_fasttext_data(large=False, supervise=False, directory=None):
@@ -85,7 +87,7 @@ def load_movie_comments(large=False, tokenize=None, num_doc=-1, idxs=None, direc
         Default is False
     tokenzie : None or str
         If None, it returns raw (not-tokenized) texts
-        Choose ['komoran', 'soynlp_unsup', 'fasttext']
+        Choose ['komoran', 'fasttext', 'soynlp_cohesion', 'soynlp_unsup']
     num_doc : int
         The number of sampled data.
         Default is -1 (all data)
@@ -204,19 +206,19 @@ def load_sentiment_dataset(data_name='small', tokenize='komoran', directory=None
         directory = '{}/models/'.format(installpath)
 
     # set tokenizer type
-    if tokenize is 'komoran':
-        tokenization = '_komoran'
-    elif tokenize is 'soynlp_unsup':
-        tokenization = '_soynlp_unsup'
-    elif tokenize is 'fasttext':
-        tokenization = '_fasttext'
-    else:
-        raise ValueError('Set tokenize as komoran or soynlp')
+    tokenize_ = check_tokenize(tokenize)
 
-    texts_path = '{}/sentiment_{}{}_texts.txt'.format(directory, data_name, tokenization)
-    x_path = '{}/sentiment_{}{}_x.pkl'.format(directory, data_name, tokenization)
-    y_path = '{}/sentiment_{}{}_y.pkl'.format(directory, data_name, tokenization)
-    vocab_path = '{}/sentiment_{}{}_vocab.txt'.format(directory, data_name, tokenization)
+    texts_path = '{}/sentiment_{}{}_texts.txt'.format(directory, data_name, tokenize_)
+    x_path = '{}/sentiment_{}{}_x.pkl'.format(directory, data_name, tokenize_)
+    y_path = '{}/sentiment_{}{}_y.pkl'.format(directory, data_name, tokenize_)
+    vocab_path = '{}/sentiment_{}{}_vocab.txt'.format(directory, data_name, tokenize_)
+
+    if not os.path.exists(texts_path):
+        print('Available tokenizers')
+        paths = glob('{}/sentiment_{}*_x.pkl'.format(directory, dataname))
+        for p in paths:
+            print('  - {}'.format(p.split('/')[-1][:-6]))
+        raise ValueError('Not provide sentiment dataset with tokenize = {}'.format(tokenize_))
 
     with open(texts_path, encoding='utf-8') as f:
         texts = [text.split() for text in f]
@@ -262,16 +264,8 @@ def load_trained_embedding(data_name='large', tokenize='soynlp_unsup',
         directory = '{}/models/'.format(installpath)
 
     # set tokenizer type
-    if tokenize is 'komoran':
-        tokenization = 'komoran'
-    elif tokenize is 'soynlp_unsup':
-        tokenization = 'soynlp_unsup'
-    elif tokenize is 'fasttext':
-        tokenization = 'fasttext'
-    else:
-        raise ValueError('Set tokenize as komoran or soynlp')
-
-    path = '{}/models/{}_{}_{}_gensim3-6.pkl'.format(installpath, embedding, data_name, tokenization)
+    tokenize = check_tokenize(tokenize)
+    path = '{}/models/{}_{}_{}_gensim3-6.pkl'.format(installpath, embedding, data_name, tokenize)
     if not os.path.exists(path):
         raise ValueError('Not yet trained {}'.format(path))
 
