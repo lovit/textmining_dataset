@@ -77,6 +77,101 @@ def get_facebook_fasttext_data(large=False, supervise=False, directory=None):
     path = '{}/data_{}_fasttext_facebook_{}.txt'.format(directory, size, suffix)
     return path
 
+def get_comments_image_path(large=False, tokenize=None, directory=None):
+    """
+    Arguments
+    ---------
+    large : Booolean
+        If True it returns data_large.
+        Else, it returns data_small.
+        Default is False
+    tokenzie : None or str
+        If None, it returns raw (not-tokenized) texts
+        Choose ['soynlp_unsup']
+
+    Returns
+    -------
+    x_path : str
+        Sentece image path
+        In x_path
+            0 37 25 4
+            255 9693 12 633
+            ...
+    y_path : str
+        Rate path
+    vocab_path : str
+        Vocabulary index path
+    """
+
+    # set default directory
+    if directory is None:
+        directory = '{}/data/'.format(installpath)
+
+    # set data size
+    size = 'large' if large else 'small'
+
+    # set tokenizer type
+    tokenize = check_tokenize(tokenize)
+
+    # set data path
+    x_path = '{}/comments_image{}_{}_x'.format(directory, tokenize, size)
+    y_path = '{}/comments_image{}_{}_y'.format(directory, tokenize, size)
+    vocab_path = '{}/comments_image{}_{}_vocab.txt'.format(directory, tokenize, size)
+    return x_path, y_path, vocab_path
+
+def load_comments_image(large=False, tokenize=None, max_len=20, directory=None):
+    """
+    Arguments
+    ---------
+    large : Booolean
+        If True it returns data_large.
+        Else, it returns data_small.
+        Default is False
+    tokenzie : None or str
+        If None, it returns raw (not-tokenized) texts
+        Choose ['soynlp_unsup']
+    max_len : int
+        Maximum length of sentence.
+        If sentence is longer than max_len, use first max_len terms
+
+    Returns
+    -------
+    X : numpy.ndarray
+        Sentence image. shape = (n sent, max_len) with padding
+    y : numpy.ndarray
+        Rate array
+    idx_to_vocab : list of str
+        Vocabulary index
+    """
+
+    x_path, y_path, vocab_path = get_comments_image_path(large, tokenize, directory)
+
+    # load vocabulary index
+    with open(vocab_path, encoding='utf-8') as f:
+        idx_to_vocab = [vocab.strip() for vocab in f]
+    padding_idx = len(idx_to_vocab)
+    idx_to_vocab.append('<padding>')
+
+    # load sentence image
+    X = []
+    with open(x_path, encoding='utf-8') as f:
+        for line in f:
+            vocabs = [int(v) for v in line.split() if v]
+            n_vocabs = len(vocabs)
+            if n_vocabs >= max_len:
+                vocabs = vocabs[:max_len]
+            elif n_vocabs < max_len:
+                vocabs = vocabs + [padding_idx] * (max_len - n_vocabs)
+            X.append(np.asarray(vocabs, dtype=np.int))
+    X = np.asarray(np.vstack(X), dtype=np.int)
+
+    # load rate
+    with open(y_path, encoding='utf-8') as f:
+        y = [int(line.strip()) for line in f]
+    y = np.asarray(y, dtype=np.int)
+
+    return X, y, idx_to_vocab
+
 def load_movie_comments(large=False, tokenize=None, num_doc=-1, idxs=None, directory=None):
     """
     Arguments
@@ -265,7 +360,7 @@ def load_trained_embedding(data_name='large', tokenize='soynlp_unsup',
 
     # set tokenizer type
     tokenize = check_tokenize(tokenize)
-    path = '{}/models/{}_{}_{}_gensim3-6.pkl'.format(installpath, embedding, data_name, tokenize)
+    path = '{}/models/{}_{}{}_gensim3-6.pkl'.format(installpath, embedding, data_name, tokenize)
     if not os.path.exists(path):
         raise ValueError('Not yet trained {}'.format(path))
 
