@@ -144,31 +144,64 @@ def load_comments_image(large=False, tokenize=None, max_len=20, directory=None):
         Vocabulary index
     """
 
+    X, y, idx_to_vocab = load_comments_image_without_padding(large, tokenize, directory)
+
+    padding_idx = len(idx_to_vocab)
+    idx_to_vocab.append('<padding>')
+
+    # padding
+    X_ = []
+    for x in X:
+        n_vocabs = len(x)
+        if n_vocabs >= max_len:
+            x = x[:max_len]
+        elif n_vocabs < max_len:
+            x = x + [padding_idx] * (max_len - n_vocabs)
+        X_.append(np.asarray(x, dtype=np.int))
+    X_ = np.asarray(np.vstack(X_), dtype=np.int)
+
+    y = np.asarray(y, dtype=np.int)
+
+    return X_, y, idx_to_vocab
+
+def load_comments_image_without_padding(large=False, tokenize=None, directory=None):
+    """
+    Arguments
+    ---------
+    large : Booolean
+        If True it returns data_large.
+        Else, it returns data_small.
+        Default is False
+    tokenzie : None or str
+        If None, it returns raw (not-tokenized) texts
+        Choose ['soynlp_unsup']
+
+    Returns
+    -------
+    X : list of list of int
+        Sentences that all vocabs have been encoded to idx.
+    y : list of int
+        Rate array
+    idx_to_vocab : list of str
+        Vocabulary index
+    """
+
     x_path, y_path, vocab_path = get_comments_image_path(large, tokenize, directory)
 
     # load vocabulary index
     with open(vocab_path, encoding='utf-8') as f:
         idx_to_vocab = [vocab.strip() for vocab in f]
-    padding_idx = len(idx_to_vocab)
-    idx_to_vocab.append('<padding>')
 
     # load sentence image
     X = []
     with open(x_path, encoding='utf-8') as f:
         for line in f:
             vocabs = [int(v) for v in line.split() if v]
-            n_vocabs = len(vocabs)
-            if n_vocabs >= max_len:
-                vocabs = vocabs[:max_len]
-            elif n_vocabs < max_len:
-                vocabs = vocabs + [padding_idx] * (max_len - n_vocabs)
-            X.append(np.asarray(vocabs, dtype=np.int))
-    X = np.asarray(np.vstack(X), dtype=np.int)
+            X.append(vocabs)
 
     # load rate
     with open(y_path, encoding='utf-8') as f:
         y = [int(line.strip()) for line in f]
-    y = np.asarray(y, dtype=np.int)
 
     return X, y, idx_to_vocab
 

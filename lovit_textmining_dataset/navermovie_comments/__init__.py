@@ -2,6 +2,7 @@ from .loader import get_comments_image_path
 from .loader import get_movie_comments_path
 from .loader import get_facebook_fasttext_data
 from .loader import load_comments_image
+from .loader import load_comments_image_without_padding
 from .loader import load_movie_comments
 from .loader import load_id_to_movie
 from .loader import load_sentiment_dataset
