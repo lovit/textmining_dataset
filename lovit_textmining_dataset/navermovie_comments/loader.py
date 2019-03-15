@@ -119,7 +119,7 @@ def get_comments_image_path(large=False, tokenize=None, directory=None):
     vocab_path = '{}/comments_image{}_{}_vocab.txt'.format(directory, tokenize, size)
     return x_path, y_path, vocab_path
 
-def load_comments_image(large=False, tokenize=None, max_len=20, directory=None):
+def load_comments_image(large=False, tokenize=None, max_len=20, n_data=-1, directory=None):
     """
     Arguments
     ---------
@@ -133,6 +133,9 @@ def load_comments_image(large=False, tokenize=None, max_len=20, directory=None):
     max_len : int
         Maximum length of sentence.
         If sentence is longer than max_len, use first max_len terms
+    n_data : int
+        Number of sampled data. If it is negative, use all data.
+        Default is -1
 
     Returns
     -------
@@ -144,7 +147,7 @@ def load_comments_image(large=False, tokenize=None, max_len=20, directory=None):
         Vocabulary index
     """
 
-    X, y, idx_to_vocab = load_comments_image_without_padding(large, tokenize, directory)
+    X, y, idx_to_vocab = load_comments_image_without_padding(large, tokenize, n_data, directory)
 
     padding_idx = len(idx_to_vocab)
     idx_to_vocab.append('<padding>')
@@ -164,7 +167,7 @@ def load_comments_image(large=False, tokenize=None, max_len=20, directory=None):
 
     return X_, y, idx_to_vocab
 
-def load_comments_image_without_padding(large=False, tokenize=None, directory=None):
+def load_comments_image_without_padding(large=False, tokenize=None, n_data=-1, directory=None):
     """
     Arguments
     ---------
@@ -195,13 +198,17 @@ def load_comments_image_without_padding(large=False, tokenize=None, directory=No
     # load sentence image
     X = []
     with open(x_path, encoding='utf-8') as f:
-        for line in f:
+        for i, line in enumerate(f):
+            if n_data > 0 and i == n_data:
+                break
             vocabs = [int(v) for v in line.split() if v]
             X.append(vocabs)
 
     # load rate
     with open(y_path, encoding='utf-8') as f:
         y = [int(line.strip()) for line in f]
+    if n_data > 0:
+        y = y[:n_data]
 
     return X, y, idx_to_vocab
 
