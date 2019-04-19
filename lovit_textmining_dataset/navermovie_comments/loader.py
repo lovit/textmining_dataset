@@ -21,7 +21,7 @@ def get_movie_comments_path(large=False, tokenize=None, directory=None):
         If True it returns data_large.
         Else, it returns data_small.
         Default is False
-    tokenzie : None or str
+    tokenize : None or str
         If None, it returns raw (not-tokenized) texts
         Choose ['komoran', 'fasttext', 'soynlp_cohesion', 'soynlp_unsup']
 
@@ -85,7 +85,7 @@ def get_comments_image_path(large=False, tokenize=None, directory=None):
         If True it returns data_large.
         Else, it returns data_small.
         Default is False
-    tokenzie : None or str
+    tokenize : None or str
         If None, it returns raw (not-tokenized) texts
         Choose ['soynlp_unsup']
 
@@ -127,7 +127,7 @@ def load_comments_image(large=False, tokenize=None, max_len=20, n_data=-1, direc
         If True it returns data_large.
         Else, it returns data_small.
         Default is False
-    tokenzie : None or str
+    tokenize : None or str
         If None, it returns raw (not-tokenized) texts
         Choose ['soynlp_unsup']
     max_len : int
@@ -175,7 +175,7 @@ def load_comments_image_without_padding(large=False, tokenize=None, n_data=-1, d
         If True it returns data_large.
         Else, it returns data_small.
         Default is False
-    tokenzie : None or str
+    tokenize : None or str
         If None, it returns raw (not-tokenized) texts
         Choose ['soynlp_unsup']
 
@@ -220,7 +220,7 @@ def load_movie_comments(large=False, tokenize=None, num_doc=-1, idxs=None, direc
         If True it returns data_large.
         Else, it returns data_small.
         Default is False
-    tokenzie : None or str
+    tokenize : None or str
         If None, it returns raw (not-tokenized) texts
         Choose ['komoran', 'fasttext', 'soynlp_cohesion', 'soynlp_unsup']
     num_doc : int
@@ -313,7 +313,7 @@ def load_sentiment_dataset(data_name='small', tokenize='komoran', directory=None
     data_name : str
         Tokenized data name. Choose ['small', '10k']
         Default is small
-    tokenzie : str
+    tokenize : str
         Choose ['komoran', 'soynlp_unsup']
         Default is 'komoran'
 
@@ -376,7 +376,7 @@ def load_trained_embedding(data_name='large', tokenize='soynlp_unsup',
     data_name : str
         Tokenized data name. Choose ['small', 'large']
         Default is large
-    tokenzie : str
+    tokenize : str
         Choose ['komoran', 'soynlp_unsup']
         Default is 'soynlp_unsup'
     embedding : str
