@@ -3,6 +3,7 @@ __author__ = 'lovit'
 
 from . import navermovie_comments
 from . import navernews_10days
+from . import carblog_dataset
 
 from .utils import fetch
 from .utils import fetch_from_a_url
