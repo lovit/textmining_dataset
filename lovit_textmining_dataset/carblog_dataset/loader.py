@@ -121,8 +121,8 @@ def load_index(category, date=False, tags=True, title=False):
 def check_category(category):
     if isinstance(category, str):
         category = int(category)
-    if not (category == 11 or category ==22):
-        raise ValueError("""Available only 11 or 22.
+    if not (category == 10 or category == 11 or category ==22):
+        raise ValueError("""Available only 10, 11 or 22.
 You can use dataset of full-category version with carblog-dataset
 https://github.com/lovit/carblog_dataset""")
     #if not (0 <= category < num_categories):
