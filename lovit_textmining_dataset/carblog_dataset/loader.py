@@ -48,7 +48,7 @@ def load_text(category):
     -----
         >>> from carblog_dataset import load_text
 
-        >>> category = 0
+        >>> category = 10
         >>> texts = load_text(category)
     """
 
@@ -85,7 +85,7 @@ def load_index(category, date=False, tags=True, title=False):
     -----
         >>> from carblog_dataset import load_index
 
-        >>> category = 0
+        >>> category = 10
         >>> load_index(category)[5:10]
 
         $ [(('만화·애니',),),
@@ -121,8 +121,8 @@ def load_index(category, date=False, tags=True, title=False):
 def check_category(category):
     if isinstance(category, str):
         category = int(category)
-    if not (category == 10 or category == 11 or category ==22):
-        raise ValueError("""Available only 10, 11 or 22.
+    if not (category == 10 or category == 21):
+        raise ValueError("""Available only 10 or 21.
 You can use dataset of full-category version with carblog-dataset
 https://github.com/lovit/carblog_dataset""")
     #if not (0 <= category < num_categories):
