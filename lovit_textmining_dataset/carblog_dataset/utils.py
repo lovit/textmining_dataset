@@ -10,7 +10,6 @@ sep = os.path.sep
 installpath = os.path.dirname(os.path.realpath(__file__))
 text_dir = '{0}{1}texts{1}'.format(installpath, sep)
 index_dir = '{0}{1}index{1}'.format(installpath, sep)
-print(text_dir)
 num_categories = 27
 
 def load_list(path, dtype=None):
