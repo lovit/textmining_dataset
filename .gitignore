@@ -19,3 +19,9 @@ config.py
 
 # Else
 tmp/
+
+# Package
+build/
+dist/
+*.egg-info
+
