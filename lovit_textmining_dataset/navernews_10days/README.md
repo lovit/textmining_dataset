@@ -39,14 +39,26 @@ corpus.iter_sent = False
 
 | Column | Example | Description |
 | --- | --- | --- |
-| unique key | 001/2016/10/20/0008765175.json | [언론사]/[year]/[month]/[date]/[기사id].json 형식이며,<br>.json 은 붙은 경우도 있고 붙지 않은 경우도 있습니다. 데이터 수집 당시의 오류입니다|
+| Press id | 001 | 네이버 뉴스 기준 언론사 아이디 입니다 |
+| Date | 2016-10-20 | `-` 로 구분된 날짜입니다 |
+| Article id | 0008765175 | 네이버 뉴스 기준 각 기사입니다 |
 | category | 104 | 네이버 뉴스 기준의 뉴스 카테고리 입니다 |
-| written time | 2016-10-20 00:00 | yyyy-mm-dd hh-MM 형식의 뉴스 기사 작성 시간이며,<br>수정된 경우 두 개 이상이 띄어쓰기로 구분뒤어 적힙니다|
+| written time | 2016-10-20 00:00 | yyyy-mm-dd hh-MM 형식의 뉴스 기사 작성 시간 혹은 최종 수정 시간입니다 |
 
 ```
-001/2016/10/20/0008765175.json  104     2016-10-20 00:00
-001/2016/10/20/0008765177.json  104     2016-10-20 00:03
-001/2016/10/20/0008765178.json  102     2016-10-20 00:12 2016-10-20 07:53
+001    2016-10-22    0008770556    104    2016-10-22 00:00
+001    2016-10-22    0008770558    104    2016-10-22 00:05
+001    2016-10-22    0008770559    104    2016-10-22 00:12
+```
+
+Press id, Date, Article id 를 조합하면 기사별 unique key 를 만들 수 있습니다.
+
+```
+press_idx = '001'
+date = '2016-10-20'
+article_idx = '0008765175'
+
+unique_key = '-'.join([press_idx, date, article_idx])
 ```
 
 ## 뉴스 댓글 데이터 형식
@@ -61,9 +73,19 @@ corpus.iter_sent = False
 
 `DATE.index` 파일에는 `DATE.txt` 의 각 줄에 해당하는 댓글의 메타 정보가 포함되어 있습니다. 띄어쓰기로 구분되어 있는 테이블 형식이며, 각 컬럼의 예시는 다음과 같습니다.
 
-| Date | Press id | Article id | Comment id | Agree | Disagree | User id (hash) |
-| --- | --- | --- | --- | --- | --- | --- |
-| 2016/10/25 | 001 | 0008775566 | 716126142 | 7 | 0 | 3w9r0 |
+| Date | Press id | Article id | Comment id | Agree | Disagree |
+| --- | --- | --- | --- | --- | --- |
+| 2016-10-25 | 001 | 0008775566 | 716126142 | 7 | 0 |
+
+Press id, Date, Article id 를 혼합하면 댓글의 뉴스 기사를 탐색할 수 있습니다.
+
+```python
+press_idx = '001'
+date = '2016-10-25'
+article_idx = '0008775566'
+
+unique_key = '-'.join([press_idx, date, article_idx])
+```
 
 ## Set system path
 
