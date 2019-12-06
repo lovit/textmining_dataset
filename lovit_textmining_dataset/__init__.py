@@ -1,5 +1,6 @@
 __name__ = 'lovit_textmining_dataset'
 __author__ = 'lovit'
+__version__ = '0.1.0'
 
 from . import navermovie_comments
 from . import navernews_10days
