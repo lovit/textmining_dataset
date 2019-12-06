@@ -42,7 +42,9 @@ Github 에 데이터 파일을 저장하면 불편한 점들이 있어서 github
 데이터 패키지는 git clone 을 이용하여 설치합니다.
 
 ```
-git clone https://github.com/lovit/textmining-dataset.git
+git clone https://github.com/lovit/textmining_dataset.git
+cd textmining_dataset
+python setup.py install
 ```
 
 설치 후 `version_check` 함수를 이용하여 현재 설치된 데이터들과 설치해야 할 데이터들을 확인합니다. local 의 버전과 data repository 의 버전을 확인합니다.
